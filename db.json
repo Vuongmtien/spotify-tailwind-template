@@ -1,0 +1,16 @@
+{
+  "users": [
+    {
+      "id": "51d6",
+      "name": "hung khung",
+      "email": "hung@gmail.com",
+      "password": "1234"
+    },
+    {
+      "id": "5b0d",
+      "name": "tien a",
+      "email": "vu1@gmail.com",
+      "password": "123"
+    }
+  ]
+}
