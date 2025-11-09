@@ -7,44 +7,49 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      setLoading(false);
-      return;
-    }
-
-    const fetchUser = async () => {
-      try {
-        const { data } = await api.get("/api/auth/me", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setUser(data);
-      } catch {
-        localStorage.removeItem("token");
-        setUser(null);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUser();
-  }, []);
-
+  // ✅ Đăng nhập
   const login = async (email, password) => {
-    const { data } = await api.post("/api/auth/login", { email, password });
-    localStorage.setItem("token", data.token);
-    setUser(data.user);
-    return data.user;
+    try {
+      await api.post(
+        "/api/auth/login",
+        { email, password },
+        { withCredentials: true }
+      );
+
+      setUser(userData);
+      localStorage.setItem("user", JSON.stringify(userData));
+      localStorage.setItem("userRole", userData.role);
+      return userData;
+    } catch (err) {
+      throw err.response?.data?.message || "Đăng nhập thất bại!";
+    }
   };
 
+  // ✅ Đăng ký
   const signup = async (username, email, password) => {
-    await api.post("/api/auth/register", { username, email, password });
+    try {
+      const { data } = await api.post(
+        "/api/auth/register",
+        { username, email, password },
+        { withCredentials: true }
+      );
+      return data;
+    } catch (err) {
+      throw err.response?.data?.message || "Đăng ký thất bại!";
+    }
   };
 
-  const logout = () => {
-    localStorage.removeItem("token");
-    setUser(null);
+  // ✅ Đăng xuất
+  const logout = async () => {
+    try {
+      await api.post("/api/auth/logout", {}, { withCredentials: true });
+    } catch (err) {
+      console.error("Lỗi khi logout:", err);
+    } finally {
+      setUser(null);
+      localStorage.removeItem("user");
+      localStorage.removeItem("userRole");
+    }
   };
 
   return (
