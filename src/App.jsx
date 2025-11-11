@@ -24,7 +24,7 @@ import Videos from "./components/videos";
 import HomePage from "./pages/HomePage";
 import api from "./lib/api";
 import AdminDashboard from "./pages/AdminDashboard";
-
+import Callback from "./pages/Callback";
 function App() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -211,6 +211,8 @@ function App() {
               }
             />
             <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/callback" element={<Callback />} />
+
 
             <Route
               path="/playlist/:title"

@@ -1,0 +1,6 @@
+export const verifyAdmin = (req, res, next) => {
+  if (!req.user || req.user.role !== "admin") {
+    return res.status(403).json({ message: "Không có quyền truy cập admin" });
+  }
+  next();
+};

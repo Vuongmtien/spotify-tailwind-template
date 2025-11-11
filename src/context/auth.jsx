@@ -10,29 +10,20 @@ export function AuthProvider({ children }) {
   // ✅ Đăng nhập
   const login = async (email, password) => {
     try {
-      await api.post(
-        "/api/auth/login",
-        { email, password },
-        { withCredentials: true }
-      );
-
-      setUser(userData);
-      localStorage.setItem("user", JSON.stringify(userData));
-      localStorage.setItem("userRole", userData.role);
-      return userData;
+      const { data } = await api.post("/api/auth/login", { email, password });
+      setUser(data.user);
+      localStorage.setItem("user", JSON.stringify(data.user));
+      localStorage.setItem("token", data.token);
+      return data.user;
     } catch (err) {
       throw err.response?.data?.message || "Đăng nhập thất bại!";
     }
   };
 
   // ✅ Đăng ký
-  const signup = async (username, email, password) => {
+  const signup = async (name, email, password) => {
     try {
-      const { data } = await api.post(
-        "/api/auth/register",
-        { username, email, password },
-        { withCredentials: true }
-      );
+      const { data } = await api.post("/api/auth/register", { name, email, password });
       return data;
     } catch (err) {
       throw err.response?.data?.message || "Đăng ký thất bại!";
@@ -48,15 +39,22 @@ export function AuthProvider({ children }) {
     } finally {
       setUser(null);
       localStorage.removeItem("user");
-      localStorage.removeItem("userRole");
+      localStorage.removeItem("token");
     }
   };
 
+  // ✅ Tự động khôi phục user khi reload trang
+  useEffect(() => {
+    const savedUser = localStorage.getItem("user");
+    if (savedUser) setUser(JSON.parse(savedUser));
+    setLoading(false);
+  }, []);
+
   return (
-    <AuthContext.Provider value={{ user, loading, login, signup, logout }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  <AuthContext.Provider value={{ user, setUser, loading, login, signup, logout }}>
+    {!loading && children}
+  </AuthContext.Provider>
+);
 }
 
 export function useAuth() {

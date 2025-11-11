@@ -113,12 +113,12 @@ const Navbar = ({ toggleSidebar }) => {
         {user ? (
           <div className="flex items-center gap-2">
             <span
-              className="font-semibold text-green-400 cursor-pointer hover:underline"
-              onClick={() => navigate("/profile")}
-              title={user.email}
-            >
-              👤 {user.username || "User"}
-            </span>
+  className="font-semibold text-green-400 cursor-pointer hover:underline"
+  onClick={() => navigate("/profile")}
+  title={user.email}
+>
+  👤 {user.name || user.username || user.email}
+</span>
             <button onClick={handleLogout} className="text-xs underline hover:text-red-400">
               Đăng xuất
             </button>

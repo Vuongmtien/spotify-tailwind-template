@@ -29,25 +29,23 @@ const EditProfile = () => {
     }
   }, [user]);
 
-  const handleSave = async () => {
-    try {
-      const res = await api.put("/auth/update", {
-        username,
-        email,
-        gender,
-        dob,
-        country,
-        agreed,
-      });
-      alert("Cập nhật thành công!");
-      setUser(res.data.user); 
-      navigate("/profile");
-    } catch (err) {
-      console.error("❌ Lỗi update:", err);
-      alert(err?.response?.data?.message || "Không thể lưu thay đổi");
-    }
-  };
+const handleSave = async () => {
+  try {
+    const token = localStorage.getItem("token");
+    const res = await api.put(
+      "/api/auth/update",
+      { username, email, gender, dob, country, agreed },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
 
+    alert("Cập nhật thành công!");
+    setUser(res.data.user); // cập nhật lại thông tin trong context
+    navigate("/profile");
+  } catch (err) {
+    console.error("Lỗi update:", err);
+    alert("Lỗi khi cập nhật thông tin người dùng");
+  }
+};
   return (
     <div className="min-h-screen bg-black text-white pt-24 px-4 max-w-2xl mx-auto space-y-6">
       <button
