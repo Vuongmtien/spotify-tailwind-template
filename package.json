@@ -14,8 +14,8 @@
     "react-icons": "^5.5.0",
     "react-router-dom": "^7.6.2"
   },
-  "scripts": {
-  "dev": "vite",
+"scripts": {
+  "dev": "vite --host 127.0.0.1",
   "build": "vite build",
   "preview": "vite preview"
 },
