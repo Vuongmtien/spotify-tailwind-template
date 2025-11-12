@@ -6,14 +6,16 @@ const Callback = () => {
 
   useEffect(() => {
     const hash = window.location.hash;
-    if (hash.includes("access_token")) {
-      const token = new URLSearchParams(hash.replace("#", "")).get("access_token");
+    const token = new URLSearchParams(hash.substring(1)).get("access_token");
+
+    if (token) {
+      // ✅ Lưu token vào localStorage
       localStorage.setItem("spotify_token", token);
       alert("✅ Đã kết nối Spotify thành công!");
-      navigate("/admin"); // quay lại admin
+      navigate("/"); // quay lại trang chủ (hoặc /admin nếu anh muốn)
     } else {
       alert("❌ Không nhận được token từ Spotify!");
-      navigate("/admin");
+      navigate("/");
     }
   }, [navigate]);
 

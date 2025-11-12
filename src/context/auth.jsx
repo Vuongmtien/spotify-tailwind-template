@@ -34,11 +34,12 @@ export function AuthProvider({ children }) {
 
   // ✅ Đăng nhập Spotify (dành cho người nghe nhạc)
   const loginSpotify = () => {
-    const authUrl = `https://accounts.spotify.com/authorize?response_type=token&client_id=${clientId}&scope=${scopes.join(
-      "%20"
-    )}&redirect_uri=${redirectUri}`;
-    window.location.href = authUrl;
-  };
+  const scopeParam = scopes.join("%20");
+  const authUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=token&redirect_uri=${encodeURIComponent(
+    redirectUri
+  )}&scope=${scopeParam}`;
+  window.location.href = authUrl;
+};
 
   // ✅ Đăng nhập tài khoản web (admin / user)
   const login = async (email, password) => {
